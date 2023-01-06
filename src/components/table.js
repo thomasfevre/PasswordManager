@@ -30,7 +30,7 @@ class SearchApp extends React.Component {
         return (
             <div>
                 <UserInput update={(e) => this.handleChange(e)} />
-                <Table data={employees} />
+                <Table data={employees} functions={this.props.functions}/>
             </div>
         )
     }
@@ -51,17 +51,13 @@ class UserInput extends React.Component {
 // Simple TableRow component for showing a <tr>
 class TableRow extends React.Component {
     render() {
+        console.log(this.props)
         return (
-            <tr>
+            <tr onClick={()=> this.props.edit(this.props.id)}>
                 <td>{this.props.libelle}</td>
                 <td>{this.props.username}</td>
                 <td>{this.props.password}</td>
-                <button
-                  className="delete-button"
-                  onClick={() => deleteItem(this.id)}
-                >
-                  ❌
-                </button>
+                <td><button onClick={()=> this.props.delete(this.props.id)}>❌</button></td>
             </tr>)
     }
 };
@@ -71,6 +67,7 @@ class Table extends React.Component {
         super(props);
     }
     render() {
+        let functions = this.props.functions;
         return (
             <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'auto',}}>
                 <table className="table">
@@ -82,9 +79,12 @@ class Table extends React.Component {
                         </tr>
                         {this.props.data.map(function (d, i) {
                             return <TableRow key={'person-' + i}
+                                id={d.id}
                                 libelle={d.libelle}
                                 username={d.username}
                                 password={d.password}
+                                delete={functions[0]}
+                                edit={functions[1]}
                             />
                         })}
                     </tbody>

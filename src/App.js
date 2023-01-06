@@ -45,14 +45,16 @@ function App() {
   }
 
   /* Edit an item text after creating it. */
-  function editItem(id, newText) {
+  function editItem(id, libelle, username, password) {
     // Get the current item
     const currentItem = items.filter((item) => item.id === id);
 
     // Create a new item with same id
     const newItem = {
       id: currentItem.id,
-      libelle: newText,
+      libelle: libelle,
+      username: username,
+      password: password,
     };
 
     deleteItem(id);
@@ -63,11 +65,6 @@ function App() {
     setShowEdit(-1);
   }
 
-
-  // Data to pass to our List elements
-  const employeeData = [
-    { libelle: "Joan", username: "developer", password: 100000 },
-  ];
 
   // Main part of app
   return (
@@ -84,38 +81,31 @@ function App() {
       <button onClick={() => addItem()}>Add</button>
 
       {/* 3. List of todos (unordered list) */}
-      <ul>
-        {items.map((item) => {
-          return (
-            <div>
-              <li key={item.id} onClick={() => setShowEdit(item.id)}>
-                {item.libelle}
-                {item.username}
-                <button
-                  className="delete-button"
-                  onClick={() => deleteItem(item.id)}
-                >
-                  ❌
-                </button>
-              </li>
+      <div style={{padding: '1em'}}>
+        {showEdit === -1 ? <SearchApp data={items} functions={[deleteItem, setShowEdit]}/> : null}
 
-              {showEdit === item.id ? (
-                <div>
-                  <input
-                    type="text"
-                    value={updatedText}
-                    onChange={(e) => setUpdatedText(e.target.value)}
-                  />
-                  <button onClick={() => editItem(item.id, updatedText)}>
-                    Update
-                  </button>
-                </div>
-              ) : null}
-            </div>
-          );
-        })}
-      </ul>
-      <SearchApp data={items} />
+        <ul>
+          {items.map((item) => {
+            return (
+              <div>
+                
+                {showEdit === item.id ? (
+                  <div>
+                    <input type="text" value={libelle} placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    <input type="text" value={username} placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    <input type="text" value={password} placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
+
+                    <button onClick={() => editItem(item.id, libelle, username, password)}>Update</button>
+                    <button onClick={() => setShowEdit(-1)}>Cancel</button>
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+        </ul>
+        
+      </div>
+      
     </div>
   );
 }
