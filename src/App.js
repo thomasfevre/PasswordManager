@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ethers } from "ethers";
+
 import "./App.css";
 import SearchApp from './components/table.js';
 
@@ -11,6 +13,26 @@ function App() {
 
   const [showEdit, setShowEdit] = useState(-1);
   const [updatedText, setUpdatedText] = useState("");
+
+  const [state, setState] = useState({});
+
+  // Web3 
+  const connect = async () => {
+    try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const signerAddress = await signer.getAddress();
+        const network = await provider.getNetwork();
+        const networkName = network.name;
+        const chainId = network.chainId;
+        setState({providerData: {networkName, chainId, signerAddress}, provider, signer});
+        console.log("Metamask connecté sur "+ networkName)
+    } catch (error) {
+      console.log(error);
+      setState({error: "une erreur est survenue"});
+    };
+  };
 
   // Helper Functions
 
@@ -71,6 +93,10 @@ function App() {
     <div className="app">
       {/* 1. Header  */}
       <h1>My Todo List</h1>
+      {/* 1.BIS  Metamask  */}
+      <div style={{padding: '1em'}}>
+        <button className="button" onClick={connect}>Connecter Metamask</button>
+      </div>
 
       {/* 2. Add new item (input) */}
       <input type="text" placeholder="Add a website name" value={libelle} onChange={(e) => setNewLibelle(e.target.value)}/>
@@ -84,7 +110,6 @@ function App() {
       <div style={{padding: '1em'}}>
         {showEdit === -1 ? <SearchApp data={items} functions={[deleteItem, setShowEdit]}/> : null}
 
-        <ul>
           {items.map((item) => {
             return (
               <div>
@@ -102,7 +127,6 @@ function App() {
               </div>
             );
           })}
-        </ul>
         
       </div>
       

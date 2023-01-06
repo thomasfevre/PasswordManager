@@ -51,7 +51,7 @@ class UserInput extends React.Component {
 // Simple TableRow component for showing a <tr>
 class TableRow extends React.Component {
     render() {
-        console.log(this.props)
+       
         return (
             <tr onClick={()=> this.props.edit(this.props.id)}>
                 <td>{this.props.libelle}</td>
