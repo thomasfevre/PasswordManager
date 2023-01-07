@@ -11,3 +11,6 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
+
+contract address on sepolia : 
+0xf43d6c7E8C041be6ad2746366ae972A39ba9F6Ae
