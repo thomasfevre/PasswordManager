@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 
 import "./App.css";
 import SearchApp from './components/table.js';
+import { Writer, WriterABI } from './ABI/writer';
 
 function App() {
   // State Hook - `useState`
@@ -37,7 +38,7 @@ function App() {
   // Helper Functions
 
   /* Adds a new item to the list array*/
-  function addItem() {
+  async function addItem() {
     // ! Check for empty item
     if (!libelle) {
       alert("Press enter an libelle.");
@@ -53,7 +54,15 @@ function App() {
 
     // Add new item to items array
     setItems((oldList) => [...oldList, item]);
-
+    // web3
+    if (await state.signer){
+      const WriterContractAddress="0xf43d6c7E8C041be6ad2746366ae972A39ba9F6Ae";
+      const ct = new ethers.Contract(WriterContractAddress, WriterABI.abi, state.signer);
+      await ct.addPassword(libelle, username, password, ' ');
+      console.log("transaction en cours...");
+    }else{
+      connect();
+    }
     // Reset libelle back to original state
     setNewLibelle("");
     setNewUsername("");
