@@ -10,3 +10,4 @@
 - Ajouter le déchiffrement + l'affichage des données de la blockchain à la place du front classic
 - changer la generation d'id (App.js) 
 - ameliorer le front  (UX-UI)  
+- utiliser le "diamond contract" ?
