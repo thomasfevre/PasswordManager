@@ -10,3 +10,4 @@
 - Reflechir pour rajouter des mecanismes de sécurité (2ème wallet possible ? sharding dans le cas où on perdrait sa seed) 
 - changer la generation d'id (App.js) 
 - ameliorer le front  (UX-UI)  
+- utiliser le "diamond contract" ?
