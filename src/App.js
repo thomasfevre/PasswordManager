@@ -5,6 +5,8 @@ import "./App.css";
 import SearchApp from './components/table.js';
 import { Writer, WriterABI } from './ABI/writer';
 
+const CryptoJS = require("crypto-js");
+
 function App() {
   // State Hook - `useState`
   const [libelle, setNewLibelle] = useState("");
@@ -17,23 +19,56 @@ function App() {
 
   const [state, setState] = useState({});
 
+  const secretKey = 'aelwfhlaef';
+  const secretIV = 'aifjaoeifjo';
+  const encMethod = 'aes-256-cbc';
+  
+  const key = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretKey));
+  const encIv = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretIV));
+  
+
+  function encryptData (data) {
+    // const cipher = createCipheriv(encMethod, key, encIv)
+    // const encrypted = cipher.update(data, 'utf8', 'hex') + cipher.final('hex')
+    // return Buffer.from(encrypted).toString('base64')
+    return CryptoJS.AES.encrypt(data, key, { iv: encIv }).toString()
+  }
+
+  function decryptData(encryptedData) {
+  //   const buff = Buffer.from(encryptedData, 'base64')
+  //   encryptedData = buff.toString('utf-8')
+  //   const decipher = createDecipheriv(encMethod, key, encIv)
+  //   return decipher.update(encryptedData, 'hex', 'utf8') + decipher.final('utf8')
+    var bytes  = CryptoJS.AES.decrypt("U2FsdGVkX19W37kyKHX4tXdYkYiRgIvRFqcsXL+N4J8=", key, { iv: encIv });
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+
+  function test(){
+    console.log(key, encIv)
+    const data = encryptData('test');
+    console.log(data);
+    const data2 = decryptData(data);
+    console.log(data2);
+  }
+
+
   // Web3 
-  const connect = async () => {
+  async function connect() {
     try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const signerAddress = await signer.getAddress();
-        const network = await provider.getNetwork();
-        const networkName = network.name;
-        const chainId = network.chainId;
-        setState({providerData: {networkName, chainId, signerAddress}, provider, signer});
-        console.log("Metamask connecté sur "+ networkName)
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const signerAddress = await signer.getAddress();
+      const network = await provider.getNetwork();
+      const networkName = network.name;
+      const chainId = network.chainId;
+      setState({ providerData: { networkName, chainId, signerAddress }, provider, signer });
+      console.log("Metamask connecté sur " + networkName);
     } catch (error) {
       console.log(error);
-      setState({error: "une erreur est survenue"});
+      setState({ error: "une erreur est survenue" });
     };
-  };
+  }
 
   // Helper Functions
 
@@ -114,6 +149,7 @@ function App() {
 
       {/* Add (button) */}
       <button onClick={() => addItem()}>Add</button>
+      <button onClick={() => test()}>Add</button>
 
       {/* 3. List of todos (unordered list) */}
       <div style={{padding: '1em'}}>
