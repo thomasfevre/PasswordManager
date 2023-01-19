@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
-import { encryptSafely, decryptSafely } from '@metamask/eth-sig-util';
+import { encryptSafely } from '@metamask/eth-sig-util';
 import { Buffer } from "buffer";
-
 
 import "./App.css";
 import SearchApp from './components/table.js';
 import { Writer, WriterABI } from './ABI/writer';
+
 window.Buffer = window.Buffer || Buffer;
-const CryptoJS = require("crypto-js");
+
 
 function App() {
   // State Hook - `useState`
@@ -21,21 +21,8 @@ function App() {
   const [updatedText, setUpdatedText] = useState("");
 
   const [state, setState] = useState({});
-
-  let key = '';
-  let encIv = '';
+ 
   
-  // let key = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretKey));
-  // let encIv = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretIV));
-
-  function encryptData (data) {
-    return CryptoJS.AES.encrypt(data, key, { iv: encIv }).toString()
-  }
-
-  function decryptData(encryptedData) {
-    var bytes  = CryptoJS.AES.decrypt(encryptedData, key, { iv: encIv });
-    return bytes.toString(CryptoJS.enc.Utf8);
-  }
 
   function stringifiableToHex(value) {
     return ethers.utils.hexlify(Buffer.from(JSON.stringify(value)));
@@ -65,13 +52,13 @@ function App() {
     if (await state.signer){
       let userAddress = await state.signer.getAddress()
       let pkey = await state.provider.send("eth_getEncryptionPublicKey", [userAddress]);
-      console.log(await pkey);
+      console.log('pubKey : '+ await pkey);
      
       try {
         const encryptedMessage = stringifiableToHex(
           encryptSafely(
             { publicKey: await pkey,
-              data: "hello world",
+              data: {username: 'user', password:'psswd'},
               version: 'x25519-xsalsa20-poly1305'
             }
           ),
@@ -85,16 +72,15 @@ function App() {
   }
 
   async function Decrypt(){
-    if (await state.signer && cipher != ''){
+    if (await state.signer && cipher !== ''){
       try{
         let userAddress = await state.signer.getAddress();
         let data = await state.provider.send("eth_decrypt", [cipher, userAddress]);
-        console.log(data);
+        console.log(JSON.parse(data)['data']);
       } catch (error) {
         console.log(`Error: ${error.message}`);
       }  
     }
-    
   }
 
   
@@ -125,7 +111,7 @@ function App() {
     }else{
       connect();
     }
-    // Reset libelle back to original state
+    // Reset inputs back to original state
     setNewLibelle("");
     setNewUsername("");
     setNewPassword("");
@@ -163,7 +149,7 @@ function App() {
   return (
     <div className="app">
       {/* 1. Header  */}
-      <h1>My Todo List</h1>
+      <h1>Password Manager</h1>
       {/* 1.BIS  Metamask  */}
       <div style={{padding: '1em'}}>
         <button className="button" onClick={connect}>Connecter Metamask</button>
