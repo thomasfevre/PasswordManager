@@ -14,5 +14,18 @@ module.exports = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_APIKEY
+  },
+  function (webpackEnv) {
+    // ...
+    return {
+     // ...
+      resolve: {
+        // ...
+        fallback: {
+          "assert": require.resolve("assert"),
+          "stream": require.resolve("stream-browserify")
+        }
+      }
+    }
   }
-};
+}

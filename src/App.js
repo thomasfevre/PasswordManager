@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
+import { encryptSafely, decryptSafely } from '@metamask/eth-sig-util';
+import { Buffer } from "buffer";
+
 
 import "./App.css";
 import SearchApp from './components/table.js';
 import { Writer, WriterABI } from './ABI/writer';
-
+window.Buffer = window.Buffer || Buffer;
 const CryptoJS = require("crypto-js");
 
 function App() {
@@ -19,38 +22,24 @@ function App() {
 
   const [state, setState] = useState({});
 
-  const secretKey = 'aelwfhlaef';
-  const secretIV = 'aifjaoeifjo';
-  const encMethod = 'aes-256-cbc';
+  let key = '';
+  let encIv = '';
   
-  const key = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretKey));
-  const encIv = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretIV));
-  
+  // let key = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretKey));
+  // let encIv = CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(secretIV));
 
   function encryptData (data) {
-    // const cipher = createCipheriv(encMethod, key, encIv)
-    // const encrypted = cipher.update(data, 'utf8', 'hex') + cipher.final('hex')
-    // return Buffer.from(encrypted).toString('base64')
     return CryptoJS.AES.encrypt(data, key, { iv: encIv }).toString()
   }
 
   function decryptData(encryptedData) {
-  //   const buff = Buffer.from(encryptedData, 'base64')
-  //   encryptedData = buff.toString('utf-8')
-  //   const decipher = createDecipheriv(encMethod, key, encIv)
-  //   return decipher.update(encryptedData, 'hex', 'utf8') + decipher.final('utf8')
-    var bytes  = CryptoJS.AES.decrypt("U2FsdGVkX19W37kyKHX4tXdYkYiRgIvRFqcsXL+N4J8=", key, { iv: encIv });
+    var bytes  = CryptoJS.AES.decrypt(encryptedData, key, { iv: encIv });
     return bytes.toString(CryptoJS.enc.Utf8);
   }
 
-  function test(){
-    console.log(key, encIv)
-    const data = encryptData('test');
-    console.log(data);
-    const data2 = decryptData(data);
-    console.log(data2);
+  function stringifiableToHex(value) {
+    return ethers.utils.hexlify(Buffer.from(JSON.stringify(value)));
   }
-
 
   // Web3 
   async function connect() {
@@ -71,6 +60,44 @@ function App() {
   }
 
   // Helper Functions
+  let cipher  = ''
+  async function Encrypt(){
+    if (await state.signer){
+      let userAddress = await state.signer.getAddress()
+      let pkey = await state.provider.send("eth_getEncryptionPublicKey", [userAddress]);
+      console.log(await pkey);
+     
+      try {
+        const encryptedMessage = stringifiableToHex(
+          encryptSafely(
+            { publicKey: await pkey,
+              data: "hello world",
+              version: 'x25519-xsalsa20-poly1305'
+            }
+          ),
+        );
+        console.log(encryptedMessage);
+        cipher = encryptedMessage;
+      } catch (error) {
+        console.log(`Error: ${error.message}`);
+      }
+    }   
+  }
+
+  async function Decrypt(){
+    if (await state.signer && cipher != ''){
+      try{
+        let userAddress = await state.signer.getAddress();
+        let data = await state.provider.send("eth_decrypt", [cipher, userAddress]);
+        console.log(data);
+      } catch (error) {
+        console.log(`Error: ${error.message}`);
+      }  
+    }
+    
+  }
+
+  
 
   /* Adds a new item to the list array*/
   async function addItem() {
@@ -149,7 +176,8 @@ function App() {
 
       {/* Add (button) */}
       <button onClick={() => addItem()}>Add</button>
-      <button onClick={() => test()}>Add</button>
+      <button onClick={() => Encrypt()}>Encrypt</button>
+      <button onClick={() => Decrypt()}>Decrypt</button>
 
       {/* 3. List of todos (unordered list) */}
       <div style={{padding: '1em'}}>
