@@ -74,15 +74,12 @@ class Table extends React.Component {
                     <tbody>
                         <tr>
                             <th>libelle</th>
-                            <th>username</th>
-                            <th>password</th>
                         </tr>
                         {this.props.data.map(function (d, i) {
-                            return <TableRow key={'person-' + i}
+                            return <TableRow key={d.id}
                                 id={d.id}
                                 libelle={d.libelle}
-                                username={d.username}
-                                password={d.password}
+                                
                                 delete={functions[0]}
                                 edit={functions[1]}
                             />

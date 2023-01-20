@@ -8,13 +8,11 @@ contract Writer {
 
     struct pObject {
         string libelle;
-        string user;
-        string password;
-        string note;
+        string encryptedData;
     }
 
-    function addPassword(string memory _libelle, string memory _user, string  memory _password, string memory _note) public {
-        pObject memory newP = pObject(_libelle, _user, _password, _note);
+    function addPassword(string memory _libelle, string memory _encryptedData) public {
+        pObject memory newP = pObject(_libelle, _encryptedData);
         passwordList.push(newP);     
     }
 

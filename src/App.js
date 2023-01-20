@@ -23,11 +23,6 @@ function App() {
   const [state, setState] = useState({});
  
   
-
-  function stringifiableToHex(value) {
-    return ethers.utils.hexlify(Buffer.from(JSON.stringify(value)));
-  }
-
   // Web3 
   async function connect() {
     try {
@@ -46,44 +41,70 @@ function App() {
     };
   }
 
-  // Helper Functions
-  let cipher  = ''
-  async function Encrypt(){
+  async function getData(){
+    if (await state.signer){
+      const WriterContractAddress="0x0794527f044fCDeFcdCa82Cf4010c9Ad4644e90D";
+      const ct = new ethers.Contract(WriterContractAddress, WriterABI.abi, state.signer);
+      const data = await ct.getData();
+      setItems([]);
+      data.forEach(element => {
+        // Create new item
+        const item = {
+          id: Math.floor(Math.random() * 1000),
+          libelle: element['libelle'],
+          encryptedData: element['encryptedData']
+        };
+        // Add new item to items array
+        setItems((oldList) => [...oldList, item]);
+      });
+      
+    }else{
+      connect();
+    }
+  }
+
+  // Crypting Functions
+  
+  async function Encrypt(dataToEncrypt){
     if (await state.signer){
       let userAddress = await state.signer.getAddress()
       let pkey = await state.provider.send("eth_getEncryptionPublicKey", [userAddress]);
-      console.log('pubKey : '+ await pkey);
      
       try {
         const encryptedMessage = stringifiableToHex(
           encryptSafely(
             { publicKey: await pkey,
-              data: {username: 'user', password:'psswd'},
+              data: dataToEncrypt,
               version: 'x25519-xsalsa20-poly1305'
             }
           ),
         );
-        console.log(encryptedMessage);
-        cipher = encryptedMessage;
+        return encryptedMessage;
       } catch (error) {
         console.log(`Error: ${error.message}`);
       }
-    }   
+    } else {connect();} 
   }
 
-  async function Decrypt(){
+  async function Decrypt(cipher){
     if (await state.signer && cipher !== ''){
       try{
         let userAddress = await state.signer.getAddress();
         let data = await state.provider.send("eth_decrypt", [cipher, userAddress]);
-        console.log(JSON.parse(data)['data']);
+        return JSON.parse(data)['data'];
       } catch (error) {
         console.log(`Error: ${error.message}`);
       }  
-    }
+    } else {connect();} 
   }
 
-  
+  // Helper Functions
+
+  function stringifiableToHex(value) {
+    return ethers.utils.hexlify(Buffer.from(JSON.stringify(value)));
+  }
+
+  // Front Functions
 
   /* Adds a new item to the list array*/
   async function addItem() {
@@ -93,28 +114,22 @@ function App() {
       return;
     }
 
-    const item = {
-      id: Math.floor(Math.random() * 1000),
-      libelle: libelle,
-      username: username,
-      password: password,
-    };
+    let encryptedData = await Encrypt({username: username, password: password});
 
-    // Add new item to items array
-    setItems((oldList) => [...oldList, item]);
     // web3
     if (await state.signer){
-      const WriterContractAddress="0xf43d6c7E8C041be6ad2746366ae972A39ba9F6Ae";
+      const WriterContractAddress="0x0794527f044fCDeFcdCa82Cf4010c9Ad4644e90D";
       const ct = new ethers.Contract(WriterContractAddress, WriterABI.abi, state.signer);
-      await ct.addPassword(libelle, username, password, ' ');
-      console.log("transaction en cours...");
+      await ct.addPassword(libelle, encryptedData);
+      console.log("transaction pending...");
+      // Reset inputs back to original state
+      setNewLibelle("");
+      setNewUsername("");
+      setNewPassword("");
     }else{
       connect();
     }
-    // Reset inputs back to original state
-    setNewLibelle("");
-    setNewUsername("");
-    setNewPassword("");
+    
   }
 
   /* Deletes an item based on the `item.id` key */
@@ -124,7 +139,7 @@ function App() {
   }
 
   /* Edit an item text after creating it. */
-  function editItem(id, libelle, username, password) {
+  async function editItem(id, libelle, username, password) {
     // Get the current item
     const currentItem = items.filter((item) => item.id === id);
 
@@ -132,8 +147,7 @@ function App() {
     const newItem = {
       id: currentItem.id,
       libelle: libelle,
-      username: username,
-      password: password,
+      encryptedData: await Encrypt({username: username, password: password})
     };
 
     deleteItem(id);
@@ -162,8 +176,7 @@ function App() {
 
       {/* Add (button) */}
       <button onClick={() => addItem()}>Add</button>
-      <button onClick={() => Encrypt()}>Encrypt</button>
-      <button onClick={() => Decrypt()}>Decrypt</button>
+      <button onClick={() => getData()}>GetData</button>
 
       {/* 3. List of todos (unordered list) */}
       <div style={{padding: '1em'}}>
