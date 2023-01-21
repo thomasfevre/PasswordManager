@@ -53,11 +53,12 @@ class TableRow extends React.Component {
     render() {
        
         return (
-            <tr onClick={()=> this.props.edit(this.props.id)}>
+            <tr>
                 <td>{this.props.libelle}</td>
                 <td>{this.props.username}</td>
                 <td>{this.props.password}</td>
-                <td><button onClick={()=> this.props.delete(this.props.id)}>❌</button></td>
+                <td><button className="BTN" onClick={()=> this.props.show(this.props.id)}>👀</button></td>
+                <td><button onClick={()=> this.props.edit(this.props.id)}>✏️</button></td>
             </tr>)
     }
 };
@@ -82,6 +83,7 @@ class Table extends React.Component {
                                 
                                 delete={functions[0]}
                                 edit={functions[1]}
+                                show={functions[2]}
                             />
                         })}
                     </tbody>

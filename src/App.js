@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { encryptSafely } from '@metamask/eth-sig-util';
 import { Buffer } from "buffer";
@@ -17,11 +17,13 @@ function App() {
   const [password, setNewPassword] = useState("");
   const [items, setItems] = useState([]);
 
+  const [show, setToShow] = useState(-1);
+
   const [showEdit, setShowEdit] = useState(-1);
   const [updatedText, setUpdatedText] = useState("");
 
   const [state, setState] = useState({});
- 
+  
   
   // Web3 
   async function connect() {
@@ -132,32 +134,52 @@ function App() {
     
   }
 
+  // useEffect(() => {
+  //   // run something every time name changes
+  //   let id = show === -1 ? (showEdit !== -1 ? showEdit : null) :show;
+  //   if (id !== null){console.log(id)} 
+  //   // if (id !== null){showData(id)} 
+  // }, [show, showEdit]);
+
+  async function showData(id) {
+    // Get the current item
+    const currentItem = items.filter((item) => item.id === id);
+    // const decryptedData = await Decrypt(currentItem.encryptedData);
+    console.log(await currentItem);
+  }
+
   /* Deletes an item based on the `item.id` key */
   function deleteItem(id) {
-    const newArray = items.filter((item) => item.id !== id);
-    setItems(newArray);
+    alert("[currently not working] Are you sure to delete this password ?");
+    // const newArray = items.filter((item) => item.id !== id);
+    // setItems(newArray);
   }
 
   /* Edit an item text after creating it. */
   async function editItem(id, libelle, username, password) {
+    alert("[currently not working] to do...");
     // Get the current item
-    const currentItem = items.filter((item) => item.id === id);
+    // const currentItem = items.filter((item) => item.id === id);
 
-    // Create a new item with same id
-    const newItem = {
-      id: currentItem.id,
-      libelle: libelle,
-      encryptedData: await Encrypt({username: username, password: password})
-    };
+    // // Create a new item with same id
+    // const newItem = {
+    //   id: currentItem.id,
+    //   libelle: libelle,
+    //   encryptedData: await Encrypt({username: username, password: password})
+    // };
 
-    deleteItem(id);
+    // deleteItem(id);
 
-    // Replace item in the item list
-    setItems((oldList) => [...oldList, newItem]);
-    setUpdatedText("");
-    setShowEdit(-1);
+    // // Replace item in the item list
+    // setItems((oldList) => [...oldList, newItem]);
+    // setUpdatedText("");
+    // setShowEdit(-1);
   }
 
+  function resetStates(){
+    setShowEdit(-1);
+    setToShow(-1);
+  }
 
   // Main part of app
   return (
@@ -169,33 +191,41 @@ function App() {
         <button className="button" onClick={connect}>Connecter Metamask</button>
       </div>
 
-      {/* 2. Add new item (input) */}
-      <input type="text" placeholder="Add a website name" value={libelle} onChange={(e) => setNewLibelle(e.target.value)}/>
-      <input type="text" placeholder="Add your username" value={username} onChange={(e) => setNewUsername(e.target.value)}/>
-      <input type="text" placeholder="Add your password" value={password} onChange={(e) => setNewPassword(e.target.value)}/>
+      
+      {showEdit === -1 ? (
+        <div>
+          {/* 2. Add new item (input) */}
+          <input type="text" placeholder="Add a website name" value={libelle} onChange={(e) => setNewLibelle(e.target.value)}/>
+          <input type="text" placeholder="Add your username" value={username} onChange={(e) => setNewUsername(e.target.value)}/>
+          <input type="text" placeholder="Add your password" value={password} onChange={(e) => setNewPassword(e.target.value)}/>
+          {/* Add (button) */}
+          <button onClick={() => addItem()}>Add</button>
+          <button onClick={() => getData()}>GetData</button>
+        </div>
+      ): null}
 
-      {/* Add (button) */}
-      <button onClick={() => addItem()}>Add</button>
-      <button onClick={() => getData()}>GetData</button>
-
+      
+      
       {/* 3. List of todos (unordered list) */}
       <div style={{padding: '1em'}}>
-        {showEdit === -1 ? <SearchApp data={items} functions={[deleteItem, setShowEdit]}/> : null}
+        {showEdit === -1 ? <SearchApp data={items} functions={[deleteItem, setShowEdit, setToShow]}/> : null}
 
           {items.map((item) => {
             return (
               <div>
                 
-                {showEdit === item.id ? (
+                {showEdit === item.id || show === item.id? (
                   <div>
                     <input type="text" value={libelle} placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
                     <input type="text" value={username} placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
                     <input type="text" value={password} placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
 
-                    <button onClick={() => editItem(item.id, libelle, username, password)}>Update</button>
-                    <button onClick={() => setShowEdit(-1)}>Cancel</button>
+                    {showEdit === item.id ? <button className="BTN" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}
+                    <button className="BTN" onClick={() => resetStates()}>❌</button>
+                    <button className="BTN" onClick={() => deleteItem(item.id)}>🗑️</button>
                   </div>
                 ) : null}
+
               </div>
             );
           })}
