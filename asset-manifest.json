@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/PasswordManager/static/css/main.964ac23f.css",
+    "main.js": "/PasswordManager/static/js/main.59acdee8.js",
+    "index.html": "/PasswordManager/index.html",
+    "main.964ac23f.css.map": "/PasswordManager/static/css/main.964ac23f.css.map",
+    "main.59acdee8.js.map": "/PasswordManager/static/js/main.59acdee8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.964ac23f.css",
+    "static/js/main.59acdee8.js"
+  ]
+}
