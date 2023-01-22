@@ -17,8 +17,6 @@ function App() {
   const [password, setNewPassword] = useState("");
   const [items, setItems] = useState([]);
 
-  const [show, setToShow] = useState(-1);
-
   const [showEdit, setShowEdit] = useState(-1);
   const [updatedText, setUpdatedText] = useState("");
 
@@ -54,7 +52,10 @@ function App() {
         const item = {
           id: Math.floor(Math.random() * 1000),
           libelle: element['libelle'],
-          encryptedData: element['encryptedData']
+          encryptedData: element['encryptedData'],
+          username:'',
+          password:'',
+          show: false,
         };
         // Add new item to items array
         setItems((oldList) => [...oldList, item]);
@@ -141,11 +142,23 @@ function App() {
   //   // if (id !== null){showData(id)} 
   // }, [show, showEdit]);
 
-  async function showData(id) {
+  async function toggleShow(id) {
+    
     // Get the current item
     const currentItem = items.filter((item) => item.id === id);
-    // const decryptedData = await Decrypt(currentItem.encryptedData);
-    console.log(await currentItem);
+
+    // Change state
+    if (currentItem[0].show === false){
+      currentItem[0].show = !currentItem[0].show;
+      const decryptedData = await Decrypt(currentItem[0].encryptedData);
+      currentItem[0].username = await decryptedData.username;
+      currentItem[0].password = await decryptedData.password;
+    } else {
+      currentItem[0].show = false;
+    }
+    
+    // Refresh the state
+    setItems((oldList) => [...oldList]);
   }
 
   /* Deletes an item based on the `item.id` key */
@@ -176,9 +189,9 @@ function App() {
     // setShowEdit(-1);
   }
 
-  function resetStates(){
+  function resetStates(id) {
     setShowEdit(-1);
-    setToShow(-1);
+    toggleShow(id);
   }
 
   // Main part of app
@@ -208,20 +221,20 @@ function App() {
       
       {/* 3. List of todos (unordered list) */}
       <div style={{padding: '1em'}}>
-        {showEdit === -1 ? <SearchApp data={items} functions={[deleteItem, setShowEdit, setToShow]}/> : null}
+        {showEdit === -1 ? <SearchApp data={items} functions={[deleteItem, setShowEdit, toggleShow]}/> : null}
 
           {items.map((item) => {
             return (
-              <div>
+              <div key={item.id}>
                 
-                {showEdit === item.id || show === item.id? (
-                  <div>
-                    <input type="text" value={libelle} placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
-                    <input type="text" value={username} placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
-                    <input type="text" value={password} placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
+                {showEdit === item.id || item.show === true? (
+                  <div >
+                    <input disabled={item.show ? "disabled":""} type="text" value={libelle} placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    <input disabled={item.show ? "disabled":""} type="text" value={username} placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    <input disabled={item.show ? "disabled":""} type="text" value={password} placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
 
                     {showEdit === item.id ? <button className="BTN" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}
-                    <button className="BTN" onClick={() => resetStates()}>❌</button>
+                    <button className="BTN" onClick={() => resetStates(item.id)}>❌</button>
                     <button className="BTN" onClick={() => deleteItem(item.id)}>🗑️</button>
                   </div>
                 ) : null}
