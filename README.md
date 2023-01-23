@@ -11,3 +11,4 @@
 - changer la generation d'id (App.js) 
 - ameliorer le front  (UX-UI) (faire une branche pour tester avec framer ?)  
 - utiliser le "diamond contract" ou un proxy ?
+- deployer sur ipfs (avec third web ?)
