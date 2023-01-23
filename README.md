@@ -1,7 +1,9 @@
 # Password Manager ReactJS
 
-## TO DO NOW  
-
+## TO DO NOW (on this branch)
+- test the package.json config (github email)
+- adding the third web connect btn
+- adding tailwind and design the front end
   
 ## TO DO LATER  
 - Ajouter le chiffrement (AES ?)
