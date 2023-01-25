@@ -201,7 +201,7 @@ function App() {
       <h1>Password Manager</h1>
       {/* 1.BIS  Metamask  */}
       <div style={{padding: '1em'}}>
-        <button className="button" onClick={connect}>Connecter Metamask</button>
+        <button className="BTN" onClick={connect}>Connecter Metamask</button>
       </div>
 
       
@@ -212,8 +212,8 @@ function App() {
           <input type="text" placeholder="Add your username" value={username} onChange={(e) => setNewUsername(e.target.value)}/>
           <input type="text" placeholder="Add your password" value={password} onChange={(e) => setNewPassword(e.target.value)}/>
           {/* Add (button) */}
-          <button onClick={() => addItem()}>Add</button>
-          <button onClick={() => getData()}>GetData</button>
+          <button className="BTN" onClick={() => addItem()}>Add</button>
+          <button className="BTN" onClick={() => getData()}>GetData</button>
         </div>
       ): null}
 

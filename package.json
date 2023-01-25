@@ -37,19 +37,17 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      "last 1 chrome version"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    "chrome >= 67",
+    "edge >= 79",
+    "firefox >= 68",
+    "opera >= 54",
+    "safari >= 14"
+  ],
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^5.0.0",
+    "tailwindcss": "^3.2.4"
   },
   "browser": {
     "assert": false
