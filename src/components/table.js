@@ -42,7 +42,7 @@ class UserInput extends React.Component {
         super(props)
     }
     render() {
-        return (<div>
+        return (<div className="mr-20 ml-20 border-b-2">
             <input className="form-control mb-2" placeholder="Search Items..." onChange={(e) => this.props.update(e)} />
         </div>)
     }
@@ -56,8 +56,8 @@ class TableRow extends React.Component {
                 <td>{this.props.libelle}</td>
                 <td>{this.props.username}</td>
                 <td>{this.props.password}</td>
-                <td><button className="BTN" onClick={()=> this.props.show(this.props.id)}>👀</button></td>
-                <td><button onClick={()=> this.props.edit(this.props.id)}>✏️</button></td>
+                <td><button className="btn-icon" onClick={()=> this.props.show(this.props.id)}>👀</button></td>
+                <td><button className="btn-icon" onClick={()=> this.props.edit(this.props.id)}>✏️</button></td>
             </tr>)
     }
 };
@@ -73,7 +73,7 @@ class Table extends React.Component {
                 <table className="table">
                     <tbody>
                         <tr>
-                            <th>libelle</th>
+                            <th></th>
                         </tr>
                         {this.props.data.map(function (d, i) {
                             return <TableRow key={d.id}

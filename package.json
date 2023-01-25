@@ -25,6 +25,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/output.css --watch",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",

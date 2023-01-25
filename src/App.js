@@ -47,6 +47,7 @@ function App() {
       const ct = new ethers.Contract(WriterContractAddress, WriterABI.abi, state.signer);
       const data = await ct.getData();
       setItems([]);
+      console.log(items)
       data.forEach(element => {
         // Create new item
         const item = {
@@ -196,13 +197,15 @@ function App() {
 
   // Main part of app
   return (
-    <div className="app">
+    <div className="app bg-slate-400 dark:bg-slate-700 h-screen text-black dark:text-white">
       {/* 1. Header  */}
-      <h1>Password Manager</h1>
-      {/* 1.BIS  Metamask  */}
-      <div style={{padding: '1em'}}>
-        <button className="BTN" onClick={connect}>Connecter Metamask</button>
+      <div className="p-2 mb-10">
+        <h1>Password Manager</h1>
+        <button className="btn float-right" onClick={connect}>Connect wallet</button>
       </div>
+      
+      
+      
 
       
       {showEdit === -1 ? (
@@ -212,8 +215,7 @@ function App() {
           <input type="text" placeholder="Add your username" value={username} onChange={(e) => setNewUsername(e.target.value)}/>
           <input type="text" placeholder="Add your password" value={password} onChange={(e) => setNewPassword(e.target.value)}/>
           {/* Add (button) */}
-          <button className="BTN" onClick={() => addItem()}>Add</button>
-          <button className="BTN" onClick={() => getData()}>GetData</button>
+          <button className="btn-n" onClick={() => addItem()}>Add</button>
         </div>
       ): null}
 
@@ -221,21 +223,36 @@ function App() {
       
       {/* 3. List of todos (unordered list) */}
       <div style={{padding: '1em'}}>
-        {showEdit === -1 ? <SearchApp data={items} functions={[deleteItem, setShowEdit, toggleShow]}/> : null}
+        {showEdit === -1 ? 
+          <div>
+            <SearchApp data={items} functions={[deleteItem, setShowEdit, toggleShow]}/>
+            {items.length == 0 ? <button className="btn-n pt-10" onClick={() => getData()}>Get Data from the Blockchain</button> : null}
+          </div>
+        :null}
 
           {items.map((item) => {
             return (
               <div key={item.id}>
                 
                 {showEdit === item.id || item.show === true? (
-                  <div >
-                    <input disabled={item.show ? "disabled":""} type="text" value={libelle} placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
-                    <input disabled={item.show ? "disabled":""} type="text" value={username} placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
-                    <input disabled={item.show ? "disabled":""} type="text" value={password} placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
-
-                    {showEdit === item.id ? <button className="BTN" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}
-                    <button className="BTN" onClick={() => resetStates(item.id)}>❌</button>
-                    <button className="BTN" onClick={() => deleteItem(item.id)}>🗑️</button>
+                  <div>
+                    <div className="inline-grid">
+                      <label htmlFor="libelle">Libelle</label>
+                      <input disabled={item.show ? "disabled":""} type="text" name="libelle" value={libelle} placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    </div>
+                    <div className="inline-grid">
+                      <label htmlFor="username">Username</label>
+                      <input disabled={item.show ? "disabled":""} type="text" name="username" value={username} placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    </div>
+                    <div className="inline-grid">
+                      <label htmlFor="password">Password</label>
+                      <input disabled={item.show ? "disabled":""} type="text" name="password" value={password} placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    </div>
+                    <div className="inline-flex align-bottom">
+                      {showEdit === item.id ? <button className="btn-icon" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}
+                      <button className="btn-icon" onClick={() => resetStates(item.id)}>❌</button>
+                      <button className="btn-icon" onClick={() => deleteItem(item.id)}>🗑️</button>
+                    </div>
                   </div>
                 ) : null}
 
