@@ -41,7 +41,7 @@ li {
   text-align: center;
   text-decoration: none;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   -webkit-transition-duration: 0.3s;
@@ -54,14 +54,14 @@ li {
   font-weight: normal;
   background: #1E90FF;
   width:  auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  padding-left: 1%;
+  padding-right: 1%;
   text-align: center;
   text-decoration: none;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   -webkit-transition-duration: 0.3s;
@@ -74,14 +74,14 @@ li {
   font-weight: normal;
   background: transparent;
   width:  auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  padding-left: 1%;
+  padding-right: 1%;
   text-align: center;
   text-decoration: none;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   -webkit-transition-duration: 0.3s;
@@ -89,10 +89,32 @@ li {
   -webkit-transition-property: box-shadow, transform;
   transition-property: box-shadow, transform;
 }
+
 .btn:hover, .btn:focus, .btn:active,
 .btn-n:hover, .btn-n:focus, .btn-n:active,
 .btn-icon:hover, .btn-icon:focus, .btn-icon:active{
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+input[type=text] {
+  background-color: black;
+  color: white;
+  border-radius:10px;
+  border:0;
+  box-shadow:4px 4px 10px rgba(0,0,0,0.06);
+  padding:0.5%;
+}
+
+
+@media (prefers-color-scheme: light) {
+  input[type=text] {
+    background-color: white;
+    color: black;
+    border-radius:10px;
+    border:0;
+    box-shadow:4px 4px 10px rgba(0,0,0,0.06);
+    padding:0.5%;
+  }
 }

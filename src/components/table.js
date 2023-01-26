@@ -42,8 +42,8 @@ class UserInput extends React.Component {
         super(props)
     }
     render() {
-        return (<div className="mr-20 ml-20 border-b-2">
-            <input className="form-control mb-2" placeholder="Search Items..." onChange={(e) => this.props.update(e)} />
+        return (<div className="mr-20 ml-20 mt-10 mb-10 p-2 border-b-2">
+            <input type="text" className="form-control mb-2" placeholder="Search Items..." onChange={(e) => this.props.update(e)} />
         </div>)
     }
 }
@@ -69,7 +69,7 @@ class Table extends React.Component {
     render() {
         let functions = this.props.functions;
         return (
-            <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'auto',}}>
+            <div className="flex items-center justify-center h-auto">
                 <table className="table">
                     <tbody>
                         <tr>

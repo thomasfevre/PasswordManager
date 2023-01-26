@@ -34,11 +34,15 @@ function App() {
       const networkName = network.name;
       const chainId = network.chainId;
       setState({ providerData: { networkName, chainId, signerAddress }, provider, signer });
-      console.log("Metamask connecté sur " + networkName);
+      console.log("Wallet connecté sur " + networkName);
     } catch (error) {
       console.log(error);
       setState({ error: "une erreur est survenue" });
     };
+  }
+
+  async function disconnect() {
+    setState({});
   }
 
   async function getData(){
@@ -195,13 +199,23 @@ function App() {
     toggleShow(id);
   }
 
+  function formatAddress(address) {
+    console.log(address);
+    let start = address.substr(0, 5);
+    let end = address.substr(address.length-5, 5);
+    return start + '...' + end;
+  }
+
   // Main part of app
   return (
     <div className="app bg-slate-400 dark:bg-slate-700 h-screen text-black dark:text-white">
       {/* 1. Header  */}
       <div className="p-2 mb-10">
         <h1>Password Manager</h1>
-        <button className="btn float-right" onClick={connect}>Connect wallet</button>
+        {!state.signer ? <button className="btn float-right" onClick={connect}>Connect wallet</button>
+        : <button className="btn-n float-right" onClick={disconnect}>
+            {formatAddress(state.providerData.signerAddress)}
+          </button>}
       </div>
       
       
@@ -226,7 +240,7 @@ function App() {
         {showEdit === -1 ? 
           <div>
             <SearchApp data={items} functions={[deleteItem, setShowEdit, toggleShow]}/>
-            {items.length == 0 ? <button className="btn-n pt-10" onClick={() => getData()}>Get Data from the Blockchain</button> : null}
+            {items.length == 0 ? <button className="btn-n" onClick={() => getData()}>Get Data from the Blockchain</button> : null}
           </div>
         :null}
 
