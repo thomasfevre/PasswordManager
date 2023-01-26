@@ -208,7 +208,7 @@ export function Main() {
 
   // Main part of app
   return (
-    <div className="app bg-slate-400 dark:bg-slate-700 h-screen text-black dark:text-white">
+    <div className="app h-screen text-black dark:text-white" style={{backgroundImage: require('../images/bg.png')}}>
       {/* 1. Header  */}
       <div className="p-2 mb-10">
         <h1><Link to="/">Password Manager</Link></h1>
