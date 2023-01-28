@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './css/home.css';
 
 export function HomePage() {
@@ -15,10 +15,24 @@ export function HomePage() {
       });
     }
 
+    const handleClickScroll = () => {
+      const element = document.getElementById('page-1');
+      if (element) {
+        // 👇 Will scroll smoothly to the top of the next section
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
     return (
-       
-        <div className="container">
-            <h2 className="object" data-value="3"><Link to="/main">To main</Link></h2>
+        <>
+        <div className="page-0">
+            {/* <h2 className="object" data-value="3"><Link to="/main">To main</Link></h2> */}
+            
+              <h2 className="object" data-value="3" >Password Manager</h2>
+              
+              <button className="btn-scroll object" data-value="4" onClick={handleClickScroll}>
+                <img src={require("../images/down-arrow.png")} alt="down arrows" width={300} height={300}/>
+              </button>
             <img src={require("../images/1.png")} className="object" data-value="-2" alt=""/>
             <img src={require("../images/2.png")} className="object" data-value="6" alt=""/>
             <img src={require("../images/3.png")} className="object" data-value="4" alt=""/>
@@ -29,5 +43,7 @@ export function HomePage() {
             <img src={require("../images/8.png")} className="object" data-value="-9" alt=""/>
             <img src={require("../images/9.png")} className="object" data-value="-5" alt=""/>
         </div>
+        <div className="page-1" id="page-1">Section 1</div>
+        </>
     );
 }

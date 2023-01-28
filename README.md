@@ -2,8 +2,10 @@
 
 ## TO DO NOW (on this branch)
 - test the package.json config (github email)
-- adding the third web connect btn
-- adding tailwind and design the front end
+- tester snap https://chrome.google.com/webstore/detail/metamask-flask-developmen/ljfoeinjpaedjfecbmggjgodbgkmjkjk
+- DONE adding the third web connect btn
+- DONE adding tailwind and design the front end
+
   
 ## TO DO LATER  
 - Ajouter le chiffrement (AES ?)
