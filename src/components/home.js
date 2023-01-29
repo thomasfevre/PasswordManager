@@ -31,7 +31,7 @@ export function HomePage() {
               <h2 className="object" data-value="3" >Password Manager</h2>
               
               <button className="btn-scroll object" data-value="4" onClick={handleClickScroll}>
-                <img src={require("../images/down-arrow.png")} alt="down arrows" width={300} height={300}/>
+                <img src={require("../images/down-arrow2.png")} alt="down arrows" width='auto' height='auto'/>
               </button>
             <img src={require("../images/1.png")} className="object" data-value="-2" alt=""/>
             <img src={require("../images/2.png")} className="object" data-value="6" alt=""/>

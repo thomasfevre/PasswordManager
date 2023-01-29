@@ -45,14 +45,14 @@ body {
 .btn-scroll {
   z-index: 1;
   position: absolute;
-  width: 10%;
+  width: 6%;
   height: 10%;
   margin-top:10%;
 }
 
-.btn-scroll:hover {
-  width: 12%;
-  height: 12%;
+.btn-scroll img:hover {
+  width: 120%;
+  height: 120%;
 }
 
 @media (max-width:800px){
