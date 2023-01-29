@@ -43,7 +43,14 @@ export function HomePage() {
             <img src={require("../images/8.png")} className="object" data-value="-9" alt=""/>
             <img src={require("../images/9.png")} className="object" data-value="-5" alt=""/>
         </div>
-        <div className="page-1" id="page-1">Section 1</div>
+        <div className="page-1" id="page-1"> 
+        <button class="cssbuttons-io-button"> Get started
+          <div class="icon">
+            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg>
+          </div>
+        </button>
+
+        </div>
         </>
     );
 }

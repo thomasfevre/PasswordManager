@@ -611,6 +611,10 @@ video {
   justify-content: center;
 }
 
+.border {
+  border-width: 1px;
+}
+
 .border-b-2 {
   border-bottom-width: 2px;
 }
