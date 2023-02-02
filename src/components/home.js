@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import './css/home.css';
+import { Footer } from './footer';
 
 export function HomePage() {
     document.addEventListener("mousemove", parallax);
@@ -44,29 +45,43 @@ export function HomePage() {
             <img src={require("../images/9.png")} className="object" data-value="-5" alt=""/>
         </div>
         <div className="page-1" id="page-1">
+          <div className="page-header">
+            <div className="align">
+                <span className="red"></span>
+                <span className="yellow"></span>
+                <span className="green"></span>
+            </div>
+
+            <h1>What's the project ?</h1>
+            <p>
+              The objective of this project is to provide a password manager using the blockchain. By encrypting their passwords with their wallet (their public key), everyone can save their confidential data on the blockchain without the risk of theft or forgetting.
+            </p><br/>
+            <p className="italic">This project is a proof of concept, and should not be considered a real tool</p>
+          </div>
           <div className="flex">
-            <div class="card">
-              <div class="card2">
+            <div className="card">
+              <div className="card2">
               </div>
             </div>
             <div className="m-10"></div>
-            <div class="card">
-              <div class="card2">
+            <div className="card">
+              <div className="card2">
               </div>
             </div>
             <div className="m-10"></div>
-            <div class="card">
-              <div class="card2">
+            <div className="card">
+              <div className="card2">
               </div>
             </div>
           </div>
-          <button class="cssbuttons-io-button">Launch
-            <div class="icon">
+          <button className="cssbuttons-io-button">Launch
+            <div className="icon">
               <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg>
             </div>
           </button>
-
+          <Footer />
         </div>
+        
         </>
     );
 }

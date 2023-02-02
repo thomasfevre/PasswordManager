@@ -555,10 +555,6 @@ video {
   float: right;
 }
 
-.m-2 {
-  margin: 0.5rem;
-}
-
 .m-10 {
   margin: 2.5rem;
 }
@@ -619,10 +615,6 @@ video {
   justify-content: center;
 }
 
-.border {
-  border-width: 1px;
-}
-
 .border-b-2 {
   border-bottom-width: 2px;
 }
@@ -633,6 +625,10 @@ video {
 
 .align-bottom {
   vertical-align: bottom;
+}
+
+.italic {
+  font-style: italic;
 }
 
 .text-black {
