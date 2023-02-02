@@ -45,6 +45,7 @@ export function HomePage() {
             <img src={require("../images/9.png")} className="object" data-value="-5" alt=""/>
         </div>
         <div className="page-1" id="page-1">
+
           <div className="page-header">
             <div className="align">
                 <span className="red"></span>
@@ -52,11 +53,13 @@ export function HomePage() {
                 <span className="green"></span>
             </div>
 
-            <h1>What's the project ?</h1>
+            <h1>What's the project ?
+              <svg className="animate-bounce mt-2" viewBox="0 0 1024 1024"  version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#000000" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#FFFFFF"></path></g></svg>            </h1>
+
             <p>
               The objective of this project is to provide a password manager using the blockchain. By encrypting their passwords with their wallet (their public key), everyone can save their confidential data on the blockchain without the risk of theft or forgetting.
             </p><br/>
-            <p className="italic">This project is a proof of concept, and should not be considered a real tool</p>
+            <p className="italic">This project is a proof of concept, and should not be considered as a real tool</p>
           </div>
           <div className="flex">
             <div className="card">

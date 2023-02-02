@@ -271,7 +271,7 @@ button {
 
  .page-header {
   width: 50vw;
-  height: 15vh;
+  height: 17vh;
   padding: 0.5rem;
   background: rgba(198, 198, 198, 0.34);
   border-radius: 8px;
@@ -286,8 +286,12 @@ button {
 }
 
 .page-header:hover {
-  height: 254px;
+  height: 38vh;
   transform: skew(0deg);
+}
+
+.page-header:hover svg {
+  animation: none;
 }
 
 .align {
@@ -324,8 +328,15 @@ button {
 
 .page-header h1 {
   text-align: center;
+  justify-content: center;
+  align-items: center;
   margin: 1.3rem;
   color: rgb(218, 244, 237);
   text-shadow: -10px 5px 10px rgba(0, 0, 0, 0.573);
+  display: grid;
+  justify-items: center;
 }
+
+
+
 
