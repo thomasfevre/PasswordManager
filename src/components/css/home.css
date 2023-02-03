@@ -48,10 +48,6 @@ body {
   margin-top:10%;
   border-radius: 2em;
   font-weight: bold;
-}
-
-
-button {
   text-decoration: none;
   position: absolute;
   border: none;
@@ -66,9 +62,11 @@ button {
   background-size: 300%;
   border-radius: 30px;
   z-index: 1;
- }
- 
- button:hover {
+}
+
+
+
+ .btn-scroll:hover {
   animation: ani 8s linear infinite;
   border: none;
  }
@@ -83,7 +81,7 @@ button {
   }
  }
  
- button:before {
+ .btn-scroll:before {
   content: '';
   position: absolute;
   top: -5px;
@@ -97,11 +95,11 @@ button {
   transition: 1s;
  }
  
- button:hover::before {
+ .btn-scroll:hover::before {
   filter: blur(20px);
  }
  
- button:active {
+ .btn-scroll:active {
   background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
  }
 
@@ -261,6 +259,18 @@ button {
  
  .card2 h2 {
   color:antiquewhite;
+ }
+
+ .card-text {
+  color: transparent;
+  font-size: smaller;
+  padding-left: 10%;
+  padding-right: 10%;
+  transition-duration: 500ms;
+ }
+
+ .card2:hover .card-text {
+  color:white;
  }
  
  .card:hover {
