@@ -2,6 +2,7 @@
 
 ## TO DO NOW (on this branch)
 - tester de faire un home2 avec les icones de finance
+- rajouter le responsive
 - test the package.json config (github email)
 - tester snap https://chrome.google.com/webstore/detail/metamask-flask-developmen/ljfoeinjpaedjfecbmggjgodbgkmjkjk
 - DONE adding the third web connect btn
