@@ -240,7 +240,7 @@ export function Main() {
         {showEdit === -1 ? 
           <div>
             <SearchApp data={items} functions={[deleteItem, setShowEdit, toggleShow]}/>
-            {items.length == 0 ? <button className="btn-n" onClick={() => getData()}>Get Data from the Blockchain</button> : null}
+            {items.length === 0 ? <button className="btn-n" onClick={() => getData()}>Get Data from the Blockchain</button> : null}
           </div>
         :null}
 
