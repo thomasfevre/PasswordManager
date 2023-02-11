@@ -1,6 +1,7 @@
 # Password Manager ReactJS
 
 ## TO DO NOW (on this branch)
+- ameliorer le front de la dapp (button-icon on hover --> show du texte)
 - tester de faire un home2 avec les icones de finance
 - rajouter le responsive
 - test the package.json config (github email)

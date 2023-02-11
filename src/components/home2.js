@@ -65,7 +65,7 @@ export function HomePage2() {
               <div className="card2">
                 <h2>Easy</h2>
                 <img className="-mt-6" src={require("../images/wallet2.png")} alt=""/>
-                <p className="card-text -mt-6">Connect with your web3 wallet</p>
+                <p className="card-text">Connect with your web3 wallet</p>
               </div>
             </div>
             <div className="m-10"></div>

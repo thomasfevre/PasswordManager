@@ -74,10 +74,10 @@ li {
   font-weight: normal;
   background: transparent;
   width:  auto;
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-  padding-left: 1%;
-  padding-right: 1%;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  padding-left: 5vw;
+  padding-right: 5vw;
   text-align: center;
   text-decoration: none;
   color: #fff;
@@ -98,6 +98,7 @@ li {
   transform: scale(1.1);
 }
 
+
 input[type=text] {
   background-color: black;
   color: white;
@@ -117,4 +118,9 @@ input[type=text] {
     box-shadow:4px 4px 10px rgba(0,0,0,0.06);
     padding:0.5%;
   }
+}
+
+table tbody .trr {
+  margin:10em;
+
 }

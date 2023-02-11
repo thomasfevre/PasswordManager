@@ -1,7 +1,6 @@
 import React from "react";
 
 
-
 // Create a SearchApp Component
 class SearchApp extends React.Component {
     constructor(props) {
@@ -50,10 +49,11 @@ class UserInput extends React.Component {
 
 // Simple TableRow component for showing a <tr>
 class TableRow extends React.Component {
+
     render() {
         return (
-            <tr>
-                <td>{this.props.libelle}</td>
+            <tr className="trr">
+                <td><p className="mx-4">{this.props.libelle}</p></td>
                 <td>{this.props.username}</td>
                 <td>{this.props.password}</td>
                 <td><button className="btn-icon" onClick={()=> this.props.show(this.props.id)}>👀</button></td>
