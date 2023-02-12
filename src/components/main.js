@@ -195,8 +195,12 @@ export function Main() {
   }
 
   function resetStates(id) {
-    setShowEdit(-1);
-    toggleShow(id);
+    if (showEdit !== -1){
+      setShowEdit(-1);
+    } else {
+      
+      toggleShow(id);
+    }
   }
 
   function formatAddress(address) {
@@ -252,15 +256,15 @@ export function Main() {
                   <div>
                     <div className="inline-grid">
                       <label htmlFor="libelle">Libelle</label>
-                      <input disabled={item.show ? "disabled":""} type="text" name="libelle" value={libelle} placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
+                      <input disabled={item.show ? "disabled":""} type="text" name="libelle" placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
                     </div>
                     <div className="inline-grid">
                       <label htmlFor="username">Username</label>
-                      <input disabled={item.show ? "disabled":""} type="text" name="username" value={username} placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
+                      <input disabled={item.show ? "disabled":""} type="text" name="username" placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
                     </div>
                     <div className="inline-grid">
                       <label htmlFor="password">Password</label>
-                      <input disabled={item.show ? "disabled":""} type="text" name="password" value={password} placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
+                      <input disabled={item.show ? "disabled":""} type="text" name="password" placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
                     </div>
                     <div className="inline-flex align-bottom">
                       {showEdit === item.id ? <button className="btn-icon" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}

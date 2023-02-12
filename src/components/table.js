@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 
 // Create a SearchApp Component
@@ -49,6 +49,27 @@ class UserInput extends React.Component {
 
 // Simple TableRow component for showing a <tr>
 class TableRow extends React.Component {
+    showBtnTest = {
+        text: '👀',
+    };
+    constructor(props) {
+        super(props);
+        this.state = {isShowBtnToggleOn: true, isEditBtnToggleOn: true};
+
+        // This binding is necessary to make `this` work in the callback
+        this.handleShowBtnHover = this.handleShowBtnHover.bind(this);
+        this.handleEditBtnHover = this.handleEditBtnHover.bind(this);
+    }
+    handleShowBtnHover() {
+        this.setState(prevState => ({
+            isShowBtnToggleOn: !prevState.isShowBtnToggleOn
+        }));
+    }
+    handleEditBtnHover() {
+        this.setState(prevState => ({
+            isEditBtnToggleOn: !prevState.isEditBtnToggleOn
+        }));
+    }
 
     render() {
         return (
@@ -56,8 +77,8 @@ class TableRow extends React.Component {
                 <td><p className="mx-4">{this.props.libelle}</p></td>
                 <td>{this.props.username}</td>
                 <td>{this.props.password}</td>
-                <td><button className="btn-icon" onClick={()=> this.props.show(this.props.id)}>👀</button></td>
-                <td><button className="btn-icon" onClick={()=> this.props.edit(this.props.id)}>✏️</button></td>
+                <td><button className="btn-icon" onClick={()=> this.props.show(this.props.id)} onMouseEnter={this.handleShowBtnHover} onMouseLeave={this.handleShowBtnHover}>{this.state.isShowBtnToggleOn ? '👀' : 'See' }</button></td>
+                <td><button className="btn-icon" onClick={()=> this.props.edit(this.props.id)} onMouseEnter={this.handleEditBtnHover} onMouseLeave={this.handleEditBtnHover}>{this.state.isEditBtnToggleOn ? '✏️' : 'Edit' }</button></td>
             </tr>)
     }
 };
