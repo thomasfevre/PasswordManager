@@ -1,13 +1,30 @@
 {
   "files": {
-    "main.css": "/PasswordManager/static/css/main.964ac23f.css",
-    "main.js": "/PasswordManager/static/js/main.ebee0139.js",
+    "main.css": "/PasswordManager/static/css/main.5b63e313.css",
+    "main.js": "/PasswordManager/static/js/main.da7df83d.js",
+    "static/media/Bag.png": "/PasswordManager/static/media/Bag.ab8c416d94b72badbfa5.png",
+    "static/media/bg.png": "/PasswordManager/static/media/bg.09eb2c302903ba732f6e.png",
+    "static/media/wallet.png": "/PasswordManager/static/media/wallet.503b2e199080f3141ffb.png",
+    "static/media/wallet2.png": "/PasswordManager/static/media/wallet2.9b59dc461529d8227eb4.png",
+    "static/media/lock.png": "/PasswordManager/static/media/lock.5a92152c9c1c9ec3f2da.png",
+    "static/media/web3identity.png": "/PasswordManager/static/media/web3identity.0e87bd9cdd3caeafacff.png",
+    "static/media/6.png": "/PasswordManager/static/media/6.4f81795d050dc668770c.png",
+    "static/media/3.png": "/PasswordManager/static/media/3.925535748455ef34f031.png",
+    "static/media/9.png": "/PasswordManager/static/media/9.3e5ecb5a473b3d9aeb38.png",
+    "static/media/1.png": "/PasswordManager/static/media/1.881d62189ea31b59e6f4.png",
+    "static/media/5.png": "/PasswordManager/static/media/5.26c785f7d75ba9d76ac4.png",
+    "static/media/2.png": "/PasswordManager/static/media/2.e30a93301a49cf766818.png",
+    "static/media/7.png": "/PasswordManager/static/media/7.4eba9c4a23d468b7c30f.png",
+    "static/media/8.png": "/PasswordManager/static/media/8.f23c1b32e35fa04d371a.png",
+    "static/media/4.png": "/PasswordManager/static/media/4.61271f79d9151d9f2e4a.png",
+    "static/media/blockchain.png": "/PasswordManager/static/media/blockchain.90a4115fc5f02b2f311c.png",
+    "static/media/encrypt.png": "/PasswordManager/static/media/encrypt.253d1238099c3a5ab01f.png",
     "index.html": "/PasswordManager/index.html",
-    "main.964ac23f.css.map": "/PasswordManager/static/css/main.964ac23f.css.map",
-    "main.ebee0139.js.map": "/PasswordManager/static/js/main.ebee0139.js.map"
+    "main.5b63e313.css.map": "/PasswordManager/static/css/main.5b63e313.css.map",
+    "main.da7df83d.js.map": "/PasswordManager/static/js/main.da7df83d.js.map"
   },
   "entrypoints": [
-    "static/css/main.964ac23f.css",
-    "static/js/main.ebee0139.js"
+    "static/css/main.5b63e313.css",
+    "static/js/main.da7df83d.js"
   ]
 }
