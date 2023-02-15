@@ -77,8 +77,8 @@ class TableRow extends React.Component {
                 <td><p className="mx-4">{this.props.libelle}</p></td>
                 <td>{this.props.username}</td>
                 <td>{this.props.password}</td>
-                <td><button className="btn-icon" onClick={()=> this.props.show(this.props.id)} onMouseEnter={this.handleShowBtnHover} onMouseLeave={this.handleShowBtnHover}>{this.state.isShowBtnToggleOn ? '👀' : 'See' }</button></td>
-                <td><button className="btn-icon" onClick={()=> this.props.edit(this.props.id)} onMouseEnter={this.handleEditBtnHover} onMouseLeave={this.handleEditBtnHover}>{this.state.isEditBtnToggleOn ? '✏️' : 'Edit' }</button></td>
+                <td><button className="btn-icon" onClick={()=> this.props.show(this.props.id)} onMouseOver={this.handleShowBtnHover} onMouseLeave={this.handleShowBtnHover}>{this.state.isShowBtnToggleOn ? '👀' : 'See' }</button></td>
+                <td><button className="btn-icon" onClick={()=> this.props.edit(this.props.id)} onMouseOver={this.handleEditBtnHover} onMouseLeave={this.handleEditBtnHover}>{this.state.isEditBtnToggleOn ? '✏️' : 'Edit' }</button></td>
             </tr>)
     }
 };

@@ -147,21 +147,20 @@ export function Main() {
   //   // if (id !== null){showData(id)} 
   // }, [show, showEdit]);
 
-  async function toggleShow(id) {
+  async function toggleShow(id, edit=false) {
     
     // Get the current item
     const currentItem = items.filter((item) => item.id === id);
 
     // Change state
-    if (currentItem[0].show === false){
+    if (currentItem[0].show === false && !edit){
       currentItem[0].show = !currentItem[0].show;
-      const decryptedData = await Decrypt(currentItem[0].encryptedData);
-      currentItem[0].username = await decryptedData.username;
-      currentItem[0].password = await decryptedData.password;
-    } else {
-      currentItem[0].show = false;
-    }
-    
+    } 
+
+    const decryptedData = await Decrypt(currentItem[0].encryptedData);
+    currentItem[0].username = await decryptedData.username;
+    currentItem[0].password = await decryptedData.password;
+
     // Refresh the state
     setItems((oldList) => [...oldList]);
   }
@@ -194,6 +193,11 @@ export function Main() {
     // setShowEdit(-1);
   }
 
+  useEffect(() => {
+    // run something every time name changes
+    toggleShow(showEdit, true);
+  }, [showEdit]); // <-- dependency array
+
   function resetStates(id) {
     if (showEdit !== -1){
       setShowEdit(-1);
@@ -204,7 +208,6 @@ export function Main() {
   }
 
   function formatAddress(address) {
-    console.log(address);
     let start = address.substr(0, 5);
     let end = address.substr(address.length-5, 5);
     return start + '...' + end;
