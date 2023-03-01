@@ -28,7 +28,7 @@ class SearchApp extends React.Component {
         // Set the `update` property of the `UserInput` element
         return (
             <div>
-                <UserInput update={(e) => this.handleChange(e)} />
+                <UserInput update={(e) => this.handleChange(e)} refresh={this.props.functions[3]}/>
                 <Table data={employees} functions={this.props.functions}/>
             </div>
         )
@@ -43,6 +43,8 @@ class UserInput extends React.Component {
     render() {
         return (<div className="mr-20 ml-20 mt-10 mb-10 p-2 border-b-2">
             <input type="text" className="form-control mb-2" placeholder="Search Items..." onChange={(e) => this.props.update(e)} />
+            <button className="btn-n" id="getBTN" onClick={() => this.props.refresh()}>Get Data from the Blockchain</button>
+
         </div>)
     }
 }

@@ -64,6 +64,10 @@ body {
   z-index: 1;
 }
 
+#getBTN {
+  margin-left:10%;
+}
+
 
 
  .btn-scroll:hover {

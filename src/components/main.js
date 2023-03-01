@@ -8,7 +8,7 @@ import SearchApp from './table.js';
 import { Writer, WriterABI } from '../ABI/writer';
 
 window.Buffer = window.Buffer || Buffer;
-
+const WRITERCONTRACTADDRESS="0x8c628E4d586Acb98e84AaF1F62049a5d9E35dc10";
 
 export function Main() {
   // State Hook - `useState`
@@ -45,13 +45,23 @@ export function Main() {
     setState({});
   }
 
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+
   async function getData(){
     if (await state.signer){
-      const WriterContractAddress="0x0794527f044fCDeFcdCa82Cf4010c9Ad4644e90D";
-      const ct = new ethers.Contract(WriterContractAddress, WriterABI.abi, state.signer);
+      const ct = new ethers.Contract(WRITERCONTRACTADDRESS, WriterABI.abi, state.signer);
       const data = await ct.getData();
       setItems([]);
-      console.log(items)
+
+      const getBTN = document.getElementById("getBTN");
+      if (data.length === 0){
+        getBTN.innerText = "No data found, start by adding a password ;)";
+        await delay(3000);  
+      }
+      getBTN.innerText = "Refresh Data";
+      
       data.forEach(element => {
         // Create new item
         const item = {
@@ -65,7 +75,6 @@ export function Main() {
         // Add new item to items array
         setItems((oldList) => [...oldList, item]);
       });
-      
     }else{
       connect();
     }
@@ -118,7 +127,7 @@ export function Main() {
   async function addItem() {
     // ! Check for empty item
     if (!libelle) {
-      alert("Press enter an libelle.");
+      alert("Please enter an libelle.");
       return;
     }
 
@@ -126,8 +135,7 @@ export function Main() {
 
     // web3
     if (await state.signer){
-      const WriterContractAddress="0x0794527f044fCDeFcdCa82Cf4010c9Ad4644e90D";
-      const ct = new ethers.Contract(WriterContractAddress, WriterABI.abi, state.signer);
+      const ct = new ethers.Contract(WRITERCONTRACTADDRESS, WriterABI.abi, state.signer);
       await ct.addPassword(libelle, encryptedData);
       console.log("transaction pending...");
       // Reset inputs back to original state
@@ -140,57 +148,61 @@ export function Main() {
     
   }
 
-  // useEffect(() => {
-  //   // run something every time name changes
-  //   let id = show === -1 ? (showEdit !== -1 ? showEdit : null) :show;
-  //   if (id !== null){console.log(id)} 
-  //   // if (id !== null){showData(id)} 
-  // }, [show, showEdit]);
 
   async function toggleShow(id, edit=false) {
-    
-    // Get the current item
-    const currentItem = items.filter((item) => item.id === id);
+    if (id !== -1){
+      // Get the current item
+      const currentItem = items.filter((item) => item.id === id);
+      
+      if (!currentItem[0].show){
+        const decryptedData = await Decrypt(currentItem[0].encryptedData);
+        currentItem[0].username = await decryptedData.username;
+        currentItem[0].password = await decryptedData.password;
 
-    // Change state
-    if (currentItem[0].show === false && !edit){
-      currentItem[0].show = !currentItem[0].show;
-    } 
+      }
+      // Change state
+      if (!edit){
+        currentItem[0].show = !currentItem[0].show;
+      } 
 
-    const decryptedData = await Decrypt(currentItem[0].encryptedData);
-    currentItem[0].username = await decryptedData.username;
-    currentItem[0].password = await decryptedData.password;
-
-    // Refresh the state
-    setItems((oldList) => [...oldList]);
+      // Refresh the state
+      setItems((oldList) => [...oldList]);
+    }
   }
 
   /* Deletes an item based on the `item.id` key */
-  function deleteItem(id) {
-    alert("[currently not working] Are you sure to delete this password ?");
-    // const newArray = items.filter((item) => item.id !== id);
-    // setItems(newArray);
+  async function deleteItem(id) {
+    // Get the current item
+    const currentItem = items.filter((item) => item.id === id);
+    const choice = window.confirm("Are you sure to delete this password '"+currentItem[0].libelle+"' ?");
+    if (choice){
+      // web3
+      if (await state.signer){
+        const ct = new ethers.Contract(WRITERCONTRACTADDRESS, WriterABI.abi, state.signer);
+        await ct.removePassword(currentItem[0].libelle);
+        console.log("transaction pending...");
+      }
+    }
   }
 
   /* Edit an item text after creating it. */
   async function editItem(id, libelle, username, password) {
-    alert("[currently not working] to do...");
     // Get the current item
-    // const currentItem = items.filter((item) => item.id === id);
+    const currentItem = items.filter((item) => item.id === id);
 
-    // // Create a new item with same id
-    // const newItem = {
-    //   id: currentItem.id,
-    //   libelle: libelle,
-    //   encryptedData: await Encrypt({username: username, password: password})
-    // };
+    // Create a new item with same id
+    const newItem = {
+      id: currentItem.id,
+      libelle: libelle,
+      encryptedData: await Encrypt({username: username, password: password})
+    };
 
-    // deleteItem(id);
+    deleteItem(id);
 
-    // // Replace item in the item list
-    // setItems((oldList) => [...oldList, newItem]);
-    // setUpdatedText("");
-    // setShowEdit(-1);
+    // Replace item in the item list
+    setItems((oldList) => [...oldList, newItem]);
+    setUpdatedText("");
+    setShowEdit(-1);
   }
 
   useEffect(() => {
@@ -202,7 +214,6 @@ export function Main() {
     if (showEdit !== -1){
       setShowEdit(-1);
     } else {
-      
       toggleShow(id);
     }
   }
@@ -246,44 +257,42 @@ export function Main() {
       <div style={{padding: '1em'}}>
         {showEdit === -1 ? 
           <div>
-            <SearchApp data={items} functions={[deleteItem, setShowEdit, toggleShow]}/>
-            {items.length === 0 ? <button className="btn-n" onClick={() => getData()}>Get Data from the Blockchain</button> : null}
+            <SearchApp data={items} functions={[deleteItem, setShowEdit, toggleShow, getData]}/>
           </div>
         :null}
 
-          {items.map((item) => {
-            return (
-              <div key={item.id}>
-                
-                {showEdit === item.id || item.show === true? (
-                  <div>
-                    <div className="inline-grid">
-                      <label htmlFor="libelle">Libelle</label>
-                      <input disabled={item.show ? "disabled":""} type="text" name="libelle" placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
-                    </div>
-                    <div className="inline-grid">
-                      <label htmlFor="username">Username</label>
-                      <input disabled={item.show ? "disabled":""} type="text" name="username" placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
-                    </div>
-                    <div className="inline-grid">
-                      <label htmlFor="password">Password</label>
-                      <input disabled={item.show ? "disabled":""} type="text" name="password" placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
-                    </div>
-                    <div className="inline-flex align-bottom">
-                      {showEdit === item.id ? <button className="btn-icon" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}
-                      <button className="btn-icon" onClick={() => resetStates(item.id)}>❌</button>
-                      <button className="btn-icon" onClick={() => deleteItem(item.id)}>🗑️</button>
-                    </div>
+        {items.map((item) => {
+          return (
+            <div key={item.id}>
+              
+              {showEdit === item.id || item.show ? (
+                <div>
+                  <div className="inline-grid">
+                    <label htmlFor="libelle">Libelle</label>
+                    <input disabled={item.show ? "disabled":""} type="text" name="libelle" placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
                   </div>
-                ) : null}
+                  <div className="inline-grid">
+                    <label htmlFor="username">Username</label>
+                    <input disabled={item.show ? "disabled":""} type="text" name="username" placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
+                  </div>
+                  <div className="inline-grid">
+                    <label htmlFor="password">Password</label>
+                    <input disabled={item.show ? "disabled":""} type="text" name="password" placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
+                  </div>
+                  <div className="inline-flex align-bottom">
+                    {showEdit === item.id ? <button className="btn-icon" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}
+                    <button className="btn-icon" onClick={() => resetStates(item.id)}>❌</button>
+                    <button className="btn-icon" onClick={() => deleteItem(item.id)}>🗑️</button>
+                  </div>
+                </div>
+              ) : null}
 
-              </div>
-            );
-          })}
+            </div>
+          );
+        })}
         
       </div>
       
     </div>
   );
 }
-
