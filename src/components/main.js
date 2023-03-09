@@ -10,6 +10,7 @@ import { Writer, WriterABI } from '../ABI/writer';
 window.Buffer = window.Buffer || Buffer;
 const WRITERCONTRACTADDRESS="0x8c628E4d586Acb98e84AaF1F62049a5d9E35dc10";
 
+
 export function Main() {
   // State Hook - `useState`
   const [libelle, setNewLibelle] = useState("");
@@ -18,10 +19,9 @@ export function Main() {
   const [items, setItems] = useState([]);
 
   const [showEdit, setShowEdit] = useState(-1);
-  const [updatedText, setUpdatedText] = useState("");
 
   const [state, setState] = useState({});
-  
+  let CT;
   
   // Web3 
   async function connect() {
@@ -34,6 +34,7 @@ export function Main() {
       const networkName = network.name;
       const chainId = network.chainId;
       setState({ providerData: { networkName, chainId, signerAddress }, provider, signer });
+      CT = new ethers.Contract(WRITERCONTRACTADDRESS, WriterABI.abi, state.signer);
       console.log("Wallet connecté sur " + networkName);
     } catch (error) {
       console.log(error);
@@ -51,8 +52,7 @@ export function Main() {
 
   async function getData(){
     if (await state.signer){
-      const ct = new ethers.Contract(WRITERCONTRACTADDRESS, WriterABI.abi, state.signer);
-      const data = await ct.getData();
+      const data = await CT.getData();
       setItems([]);
 
       const getBTN = document.getElementById("getBTN");
@@ -135,8 +135,7 @@ export function Main() {
 
     // web3
     if (await state.signer){
-      const ct = new ethers.Contract(WRITERCONTRACTADDRESS, WriterABI.abi, state.signer);
-      await ct.addPassword(libelle, encryptedData);
+      await CT.addPassword(libelle, encryptedData);
       console.log("transaction pending...");
       // Reset inputs back to original state
       setNewLibelle("");
@@ -154,11 +153,10 @@ export function Main() {
       // Get the current item
       const currentItem = items.filter((item) => item.id === id);
       
-      if (!currentItem[0].show){
+      if (currentItem[0].username === ''){
         const decryptedData = await Decrypt(currentItem[0].encryptedData);
         currentItem[0].username = await decryptedData.username;
         currentItem[0].password = await decryptedData.password;
-
       }
       // Change state
       if (!edit){
@@ -178,8 +176,7 @@ export function Main() {
     if (choice){
       // web3
       if (await state.signer){
-        const ct = new ethers.Contract(WRITERCONTRACTADDRESS, WriterABI.abi, state.signer);
-        await ct.removePassword(currentItem[0].libelle);
+        await CT.removePassword(currentItem[0].libelle);
         console.log("transaction pending...");
       }
     }
@@ -187,26 +184,39 @@ export function Main() {
 
   /* Edit an item text after creating it. */
   async function editItem(id, libelle, username, password) {
-    // Get the current item
-    const currentItem = items.filter((item) => item.id === id);
-
+    if (libelle === ''){
+      libelle = document.getElementById('libelleUpdate').placeholder;
+    }
+    if (username === ''){
+      username = document.getElementById('usernameUpdate').placeholder;
+    }
+    if (password === ''){
+      password = document.getElementById('passwordUpdate').placeholder;
+    }
+    
+    console.log(libelle);
     // Create a new item with same id
-    const newItem = {
-      id: currentItem.id,
-      libelle: libelle,
-      encryptedData: await Encrypt({username: username, password: password})
-    };
+    const encryptedData = await Encrypt({username: username, password: password});
 
-    deleteItem(id);
+    await deleteItem(id);
 
-    // Replace item in the item list
-    setItems((oldList) => [...oldList, newItem]);
-    setUpdatedText("");
+    // web3
+    if (await state.signer && libelle !== ''){
+      await CT.addPassword(libelle, encryptedData);
+      console.log("transaction pending...");
+      // Reset inputs back to original state
+      setNewLibelle("");
+      setNewUsername("");
+      setNewPassword("");
+    }else{
+      connect();
+    }
+    
     setShowEdit(-1);
   }
 
   useEffect(() => {
-    // run something every time name changes
+    // run something every time we click on edit
     toggleShow(showEdit, true);
   }, [showEdit]); // <-- dependency array
 
@@ -269,15 +279,15 @@ export function Main() {
                 <div>
                   <div className="inline-grid">
                     <label htmlFor="libelle">Libelle</label>
-                    <input disabled={item.show ? "disabled":""} type="text" name="libelle" placeholder={item.libelle} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    <input disabled={item.show ? "disabled":""} type="text" name="libelle" id="libelleUpdate" placeholder={item.libelle} onChange={(e) => setNewLibelle(e.target.value)}/>
                   </div>
                   <div className="inline-grid">
                     <label htmlFor="username">Username</label>
-                    <input disabled={item.show ? "disabled":""} type="text" name="username" placeholder={item.username} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    <input disabled={item.show ? "disabled":""} type="text" name="username" id="usernameUpdate" placeholder={item.username} onChange={(e) => setNewUsername(e.target.value)}/>
                   </div>
                   <div className="inline-grid">
                     <label htmlFor="password">Password</label>
-                    <input disabled={item.show ? "disabled":""} type="text" name="password" placeholder={item.password} onChange={(e) => setUpdatedText(e.target.value)}/>
+                    <input disabled={item.show ? "disabled":""} type="text" name="password" id="passwordUpdate" placeholder={item.password} onChange={(e) => setNewPassword(e.target.value)}/>
                   </div>
                   <div className="inline-flex align-bottom">
                     {showEdit === item.id ? <button className="btn-icon" onClick={() => editItem(item.id, libelle, username, password)}>✅</button>:null}
